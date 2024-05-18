@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "700"],  // Example weights for the Inter font
+});
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "700", "900"],  // Specify multiple weights for Roboto
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +26,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        <link
+              rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+              integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+              crossOrigin="anonymous"
+              referrerPolicy="no-referrer"
+            />
+            <link rel="shortcut icon" href="#"></link>
+      </head>
+      <body className={`${roboto.className} overflow-x-hidden bg-waikawa-gray-50`}>
+        <Toaster />
+        {children}
+        </body>
     </html>
   );
 }
