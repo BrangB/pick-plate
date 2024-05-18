@@ -9,7 +9,7 @@ import { AiFillCloseCircle } from 'react-icons/ai'
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa"
 import AuthTransition from '@/components/common/AuthTransition'
 
-const page = () => {
+const Page = () => {
 
     const [validatePassword, setValidatePassword] = useState({
         length: false,
@@ -152,4 +152,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

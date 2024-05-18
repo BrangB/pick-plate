@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import AuthTransition from '@/components/common/AuthTransition'
 import { setCookie } from 'cookies-next';
 
-const page = () => {
+const Page = () => {
 
 
     const [showPassword, setShowPassword] = useState(false)
@@ -91,4 +91,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
