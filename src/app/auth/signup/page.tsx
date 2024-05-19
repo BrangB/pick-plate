@@ -103,51 +103,56 @@ const Page = () => {
 
   return (
     <div className='w-screen h-screen flex items-center justify-center bg-waikawa-gray-50 overflow-x-hidden'>
-        <AuthTransition>
-        <div className="form p-8 bg-waikawa-gray-200 flex items-center justify-around gap-6 flex-col w-[85%] sm:w-[500px] md:w-[400px]">
-                <h1 className='font-bold text-xl md:text-2xl text-waikawa-gray-600 mb-3 uppercase'>sign up</h1>
-                <div className="inputs flex flex-col gap-4 w-full">
-                    <div className="emailInput flex flex-col gap-1 w-full relative">
-                        <label htmlFor="email" className='font-normal text-waikawa-gray-800'>Email</label>
-                        <input type="email" placeholder='Enter your email...' ref={emailInputRef} id="email" value={inputData.email} className='email bg-waikawa-gray-100 border-waikawa-gray-600 text-md p-3 text-black outline-none border-l-2' onChange={(e) => setInputData({...inputData, email: e.target.value.trim()})}/>
+        <div className='flex items-center justify-center w-[90%] sm:w-[400px] md:w-[600px] 2xl:w-[800px]'>
+            <AuthTransition>
+                <div className="form p-8 px-6 md:px-8 bg-waikawa-gray-200 flex flex-col md:flex-row items-center justify-around gap-6 md:gap-8 w-full">
+                    <div className="leftSide flex flex-col gap-6 w-full lg:w-[50%] ">
+                        <h1 className='font-bold text-xl md:text-2xl text-waikawa-gray-600 mb-3 uppercase'>sign up</h1>
+                        <div className="inputs flex flex-col gap-4 w-full ">
+                            <div className="emailInput flex flex-col gap-1 w-full relative ">
+                                <label htmlFor="email" className='font-normal text-waikawa-gray-800'>Email</label>
+                                <input type="email" placeholder='Enter your email...' ref={emailInputRef} id="email" value={inputData.email} className='email bg-waikawa-gray-100 border-waikawa-gray-600 text-md p-3 text-black outline-none border-l-2' onChange={(e) => setInputData({...inputData, email: e.target.value.trim()})}/>
+                            </div>
+                            <div className="passwordInput flex flex-col gap-1 w-full relative">
+                                <label htmlFor="password" className='font-normal text-waikawa-gray-800'>Password</label>
+                                <input type={`${showPassword ? "text" : "password"}`} id='password' ref={passwordInputRef} value={inputData.password} className="passowrd bg-waikawa-gray-100 border-waikawa-gray-600 text-md p-3 text-black outline-none border-l-2" placeholder='Enter your password...' onChange={(e) => handlePasswordChange(e)}/>
+                                    {
+                                        !showPassword ? <i className="fa-solid fa-eye-slash absolute top-1 right-2 cursor-pointer text-waikawa-gray-900" onClick={() => setShowPassword(!showPassword)}></i> : <i className="fa-solid fa-eye absolute top-1 right-2 cursor-pointer text-waikawa-gray-900" onClick={() => setShowPassword(!showPassword)}></i>
+                                    }
+                            </div>
+                            <div className="passwordInput flex flex-col gap-1 w-full relative">
+                                <label htmlFor="confirmPassword" className='font-normal text-waikawa-gray-800'>Confirm Password</label>
+                                <input type={`${showPassword ? "text" : "password"}`} id='password' ref={confirmPasswordInputRef} value={inputData.confirmPassword} className="confirmPassword bg-waikawa-gray-100 border-waikawa-gray-600 text-md p-3 text-black outline-none border-l-2" placeholder='Confirm password...' onChange={(e) => setInputData(prevState => ({...prevState, confirmPassword: e.target.value}))}/>
+                            </div>
+                        </div>
+                        <button className={` w-full h-[45px] p-2 flex items-center justify-center bg-waikawa-gray-500 text-white duration-200 hover:bg-waikawa-gray-600 `} onClick={validateInputAndSignup}>{loading ? <LoginLoadingAnimation /> : "Sign up"}</button>
+                        <p className='text-waikawa-gray-600 w-full text-sm cursor-pointer font-normal -mt-3'>If you already have an account, <Link href={'/auth/login'} className='text-waikawa-gray-900 uppercase font-semibold'>login</Link></p>
                     </div>
-                    <div className="passwordInput flex flex-col gap-1 w-full relative">
-                        <label htmlFor="password" className='font-normal text-waikawa-gray-800'>Password</label>
-                        <input type={`${showPassword ? "text" : "password"}`} id='password' ref={passwordInputRef} value={inputData.password} className="passowrd bg-waikawa-gray-100 border-waikawa-gray-600 text-md p-3 text-black outline-none border-l-2" placeholder='Enter your password...' onChange={(e) => handlePasswordChange(e)}/>
-                            {
-                                !showPassword ? <i className="fa-solid fa-eye-slash absolute top-1 right-2 cursor-pointer text-waikawa-gray-900" onClick={() => setShowPassword(!showPassword)}></i> : <i className="fa-solid fa-eye absolute top-1 right-2 cursor-pointer text-waikawa-gray-900" onClick={() => setShowPassword(!showPassword)}></i>
-                            }
-                    </div>
-                    <div className="passwordInput flex flex-col gap-1 w-full relative">
-                        <label htmlFor="confirmPassword" className='font-normal text-waikawa-gray-800'>Confirm Password</label>
-                        <input type={`${showPassword ? "text" : "password"}`} id='password' ref={confirmPasswordInputRef} value={inputData.confirmPassword} className="confirmPassword bg-waikawa-gray-100 border-waikawa-gray-600 text-md p-3 text-black outline-none border-l-2" placeholder='Confirm password...' onChange={(e) => setInputData(prevState => ({...prevState, confirmPassword: e.target.value}))}/>
+                    <div className="validation flex flex-col w-full gap-3 mt-3 lg:w-[50%] h-auto md:h-full">
+                        <h1 className='text-waikawa-gray-800 font-[600px] md:text-lg md:font-semibold'>Password Requirements</h1>
+                        <div className="passwordlength flex gap-2 items-start justify-start ">
+                            {inputData.password === "" && <FaExclamationCircle className='text-gray-300 mt-[2px]' />}
+                            {validatePassword.length && inputData.password !== "" && <FaCheckCircle className='text-green-500 mt-[2px]' />}
+                            {!validatePassword.length && inputData.password !== "" && <AiFillCloseCircle className='text-red-500 mt-[2px]' />}
+                            <p className='text-sm md:text-md 2xl:text-lg text-waikawa-gray-900 flex gap-1'><span className='hidden md:flex'>Password</span>should have at least 8 characters.</p>
+                        </div>
+                        <div className="specialChar flex gap-2 items-start justify-start">
+                            {inputData.password === "" && <FaExclamationCircle className='text-gray-300 mt-[2px]' />}
+                            {validatePassword.specialChar && inputData.password !== "" && <FaCheckCircle className='text-green-500 mt-[2px]' />}
+                            {!validatePassword.specialChar && inputData.password !== "" && <AiFillCloseCircle className='text-red-500 mt-[2px]' />}
+                            <p className='text-sm md:text-md 2xl:text-lg text-waikawa-gray-900 flex gap-1'><span className='hidden md:flex'>Password</span>must contain special character.</p>
+                        </div>
+                        <div className="number flex gap-2 items-start justify-start">
+                            {inputData.password === "" && <FaExclamationCircle className='text-gray-300 mt-[2px]' />}
+                            {validatePassword.number && inputData.password !== "" && <FaCheckCircle className='text-green-500 mt-[2px]' />}
+                            {!validatePassword.number && inputData.password !== "" && <AiFillCloseCircle className='text-red-500 mt-[2px]' />}
+                            <p className='text-sm md:text-md 2xl:text-lg text-waikawa-gray-900 flex gap-1'><span className='hidden md:flex'>Password</span>must contain number.</p>
+                        </div>
                     </div>
                 </div>
-                <button className={` w-full h-[45px] p-2 flex items-center justify-center bg-waikawa-gray-500 text-white duration-200 hover:bg-waikawa-gray-600 `} onClick={validateInputAndSignup}>{loading ? <LoginLoadingAnimation /> : "Sign up"}</button>
-                <p className='text-waikawa-gray-600 w-full text-sm cursor-pointer font-normal -mt-3'>If you already have an account, <Link href={'/auth/login'} className='text-waikawa-gray-900 uppercase font-semibold'>login</Link></p>
-                <div className="validation flex flex-col w-full gap-3 mt-3">
-                    <h1 className='text-waikawa-gray-800 font-[600px]'>Password Requirements</h1>
-                    <div className="passwordlength flex gap-2 items-center justify-start">
-                        {inputData.password === "" && <FaExclamationCircle className='text-gray-300' />}
-                        {validatePassword.length && inputData.password !== "" && <FaCheckCircle className='text-green-500' />}
-                        {!validatePassword.length && inputData.password !== "" && <AiFillCloseCircle className='text-red-500' />}
-                        <p className='text-sm md:text-md text-waikawa-gray-900 flex gap-1'><span className='hidden md:flex'>Password</span>should have at least 8 characters.</p>
-                    </div>
-                    <div className="specialChar flex gap-2 items-center justify-start">
-                        {inputData.password === "" && <FaExclamationCircle className='text-gray-300' />}
-                        {validatePassword.specialChar && inputData.password !== "" && <FaCheckCircle className='text-green-500' />}
-                        {!validatePassword.specialChar && inputData.password !== "" && <AiFillCloseCircle className='text-red-500' />}
-                        <p className='text-sm md:text-md text-waikawa-gray-900 flex gap-1'><span className='hidden md:flex'>Password</span>must contain special character.</p>
-                    </div>
-                    <div className="number flex gap-2 items-center justify-start">
-                        {inputData.password === "" && <FaExclamationCircle className='text-gray-300' />}
-                        {validatePassword.number && inputData.password !== "" && <FaCheckCircle className='text-green-500' />}
-                        {!validatePassword.number && inputData.password !== "" && <AiFillCloseCircle className='text-red-500' />}
-                        <p className='text-sm md:text-md text-waikawa-gray-900 flex gap-1'><span className='hidden md:flex'>Password</span>must contain number.</p>
-                    </div>
-                </div>
-            </div>
-        </AuthTransition>
+            </AuthTransition>
+        </div>
+
     </div>
   )
 }

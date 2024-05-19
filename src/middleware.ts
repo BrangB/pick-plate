@@ -13,11 +13,9 @@ export default async function middleware(req: NextRequest) {
     const isProtectedRoute = protectedRoutes.includes(pathname);
     const isPublicRoute = publicRoutes.includes(pathname);
 
-    const jwtSecret = "YqpPbJyeCIGIoCwNXLbi+9NkAKEoJJUd5ZY67AZpqayLXRP9905wrbSKIDottPE5TfUuZTAcCh5rgP42bSmrrA=="
-
-
-    const verifyT = token && await verifyToken(token, jwtSecret);
+    const verifyT = token && await verifyToken(token, process.env.JWT_SECRET_KEY as string);
     // const access_role = verifyT && verifyT?.email
+    console.log(verifyT)
 
     if(pathname == "/auth/login" || pathname == "/auth/signup"){
         if(token && role){
