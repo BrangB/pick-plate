@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyToken } from "./utils/jwt/verfityToken";
 
 const protectedRoutes = ['/privatePage'];
 const publicRoutes = ['/auth/login', '/auth/signup', '/'];
@@ -12,6 +13,19 @@ export default async function middleware(req: NextRequest) {
     const isProtectedRoute = protectedRoutes.includes(pathname);
     const isPublicRoute = publicRoutes.includes(pathname);
 
+    const jwtSecret = "YqpPbJyeCIGIoCwNXLbi+9NkAKEoJJUd5ZY67AZpqayLXRP9905wrbSKIDottPE5TfUuZTAcCh5rgP42bSmrrA=="
+
+
+    const verifyT = token && await verifyToken(token, jwtSecret);
+    // const access_role = verifyT && verifyT?.email
+
+    if(pathname == "/auth/login" || pathname == "/auth/signup"){
+        if(token && role){
+            return NextResponse.redirect(new URL('/', req.nextUrl));
+        }
+        return NextResponse.next();
+    }
+
     // Allow requests to public routes
     if (isPublicRoute) {
         return NextResponse.next();
@@ -22,12 +36,15 @@ export default async function middleware(req: NextRequest) {
 
     // Handle protected routes
     if (isProtectedRoute) {
-        if (!token || !role) {
+        if(token && role){
+            if(role == "admin"){
+                return NextResponse.next();
+            }else{
+                return NextResponse.redirect(new URL("/auth/unAuthorized", req.nextUrl));
+            }
+        }else{
             return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
         }
-        // Debugging log for token and role
-        console.log("Token:", token, "Role:", role);
-        return NextResponse.next();
     }
 
     // Default response for other routes
