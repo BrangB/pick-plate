@@ -15,7 +15,7 @@ export default async function middleware(req: NextRequest) {
 
     const verifyT = token && await verifyToken(token, process.env.JWT_SECRET_KEY as string);
     // const access_role = verifyT && verifyT?.email
-    console.log(verifyT)
+    console.log("Verify: " + verifyT)
 
     if(pathname == "/auth/login" || pathname == "/auth/signup"){
         if(token && role){
